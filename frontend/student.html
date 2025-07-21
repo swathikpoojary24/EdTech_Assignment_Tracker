@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Student Dashboard</h1>
+        <button id="logoutBtn">Logout</button>
 
+        <div class="section">
+            <h2>Available Assignments</h2>
+            <ul id="availableAssignmentsList">
+                </ul>
+            <p id="loadAssignmentsMessage" class="message"></p>
+        </div>
+
+        <div class="section" id="submitAssignmentSection" style="display: none;">
+            <h2>Submit Assignment: "<span id="assignmentToSubmitTitle"></span>"</h2>
+            <form id="submitAssignmentForm">
+                <textarea id="submissionText" placeholder="Your submission text..." rows="5" required></textarea>
+                <input type="file" id="submissionFile">
+                <button type="submit" data-assignment-id="">Submit</button>
+            </form>
+            <p id="submitAssignmentMessage" class="message"></p>
+        </div>
+
+        <div class="section">
+            <h2>My Submissions</h2>
+            <ul id="mySubmissionsList">
+                </ul>
+            <p id="loadMySubmissionsMessage" class="message"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

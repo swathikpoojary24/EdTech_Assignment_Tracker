@@ -3,8 +3,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 import os
-
 from . import models, schemas, auth
 from .database import engine, get_db
 
@@ -16,11 +16,11 @@ app = FastAPI(
     description="API for managing assignments and submissions.",
     version="1.0.0"
 )
-frontend_origin = "https://symmetrical-fiesta-qr6x97pjj94hxxg6-8001.app.github.dev"
+# frontend_origin = "https://symmetrical-fiesta-qr6x97pjj94hxxg6-8001.app.github.dev"
 # CORS configuration (allows frontend to talk to backend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[frontend_origin],  # Adjust this to your frontend URL in production
+    allow_origins=["*"],  # Adjust this to your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,7 +50,11 @@ def signup_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 @app.post("/api/token", response_model=schemas.Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login_for_access_token(
+    response: Response, # This is correctly placed now
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
     user = auth.get_user_by_username(db, form_data.username)
     if not user or not auth.verify_password(form_data.password, user.password_hash):
         raise HTTPException(
@@ -62,6 +66,18 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     access_token = auth.create_access_token(
         data={"sub": user.username, "role": user.role}, expires_delta=access_token_expires
     )
+
+    # --- START: THIS IS THE BLOCK YOU NEED TO ADD/ENSURE IS PRESENT ---
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,  # Makes the cookie inaccessible to JavaScript
+        secure=True,    # Ensures the cookie is only sent over HTTPS
+        max_age=int(access_token_expires.total_seconds()), # Set cookie expiry to match token expiry
+        samesite="Lax"  # Helps mitigate CSRF attacks
+    )
+    # --- END: Cookie setting block ---
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 # --- Teacher Endpoints ---

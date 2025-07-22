@@ -1,0 +1,30 @@
+{
+  "name": "EdTech Assignment Tracker",
+  "image": "mcr.microsoft.com/devcontainers/python:0-3.11", // Using Python 3.11 base image
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+        // Add other extensions you find useful, e.g., for SQLite viewer
+      ]
+    }
+  },
+  "postCreateCommand": "pip install -r backend/requirements.txt",
+  "forwardPorts": [8000, 8001], // Forward FastAPI and frontend server ports
+  "portsAttributes": {
+    "8000": {
+      "label": "FastAPI Backend",
+      "onAutoForward": "notify"
+    },
+    "8001": {
+      "label": "Frontend Server",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}

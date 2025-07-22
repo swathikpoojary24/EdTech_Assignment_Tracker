@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://symmetrical-fiesta-qr6x97pjj94hxxg6-8000.app.github.dev/'; // Adjust if your FastAPI runs on a different port/host
+const API_BASE_URL = 'https://symmetrical-fiesta-qr6x97pjj94hxxg6-8000.app.github.dev'; // Adjust if your FastAPI runs on a different port/host
 
 // --- Utility Functions ---
 

@@ -16,11 +16,10 @@ app = FastAPI(
     description="API for managing assignments and submissions.",
     version="1.0.0"
 )
-# frontend_origin = "https://symmetrical-fiesta-qr6x97pjj94hxxg6-8001.app.github.dev"
 # CORS configuration (allows frontend to talk to backend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this to your frontend URL in production
+    allow_origins=["https://supreme-space-couscous-9vwxq7jr479hx45p-8001.app.github.dev"],  # Adjust this to your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
